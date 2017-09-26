@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PhantomJS as a Service</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+    <style>
+        img {
+            width: 100%;
+        }
+
+        .img-container {
+            box-shadow: 0px 10px 25px 0px rgba(0, 0, 0, 0.3);
+            max-height: 300px;
+            overflow: scroll;
+        }
+
+        .bootstrap-tagsinput .tag {
+            margin-right: 2px;
+            color: white;
+        }
+
+        .bootstrap-tagsinput {
+            width: 100%;
+        }
+
+        .label-info {
+            background-color: #5bc0de;
+        }
+
+        .label {
+            display: inline;
+            padding: .2em .6em .3em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: .25em;
+        }
+    </style>
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-8 push-2 col-auto pt-5">
+                <h1>Phantom JS as a Service</h1>
+                <h2>Active Phantom Browsers: <span class="label label-info" id="phantoms">0</span></h2>
+                <br>
+
+                <form>
+                    <div class="form-group">
+                        <label for="user">User name to store the images</label>
+                        <input type="text" class="form-control" id="user"
+                               value="test" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Enter comma separated websites with protocoll</label><br>
+                        <input required id="urls" type="text" value="http://codementor.io,http://9gag.com,https://custodee.com"
+                               data-role="tagsinput" style="display: none;">
+                    </div>
+
+                    <button id="#start" type="submit" class="btn btn-primary" onclick="crawlWebsites();">Start
+                        crawling
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row pb-4 pt-4" id="images">
+
+        </div>
+    </div>
+
+</div>
+</body>
+
+<script>
+    var phantomStatus = 0;
+    $("button").click( function(event) {
+        event.preventDefault();
+    });
+
+
+    function getAllImages() {
+        var user = $("#user").val();
+        $("#images").html("");
+        $.get("/api/images/" + user, function (images) {
+            images.map(function (img) {
+                img = "<div class='col-4 pb-4'><div class='img-container'><img src='" + img + "'></div></div>";
+                $("#images").append(img);
+            })
+        });
+    }
+
+    function crawlWebsites() {
+        var websites = $("#urls").tagsinput('items');
+        var body = JSON.stringify({websites: websites});
+        var user = $("#user").val();
+
+        $.ajax({
+            url: "/api/phantom/" + user,
+            type: "POST",
+            data: body,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        });
+    }
+
+    // check phantom status every xy seconds
+    function getPhantomSessions() {
+        $.get("/api/phantom-status/", function (data) {
+            if(phantomStatus != data.phantom.length){
+                console.log("Status changed, get images");
+                getAllImages();
+                phantomStatus = data.phantom.length;
+            }
+            $("#phantoms").html(phantomStatus);
+        });
+    }
+
+    // run functions
+    $(window).ready(function () {
+        getAllImages();
+        getPhantomSessions();
+        // repeat the function every 5 seconds
+        setInterval(function () {
+            getPhantomSessions();
+        },5000)
+    })
+
+
+
+</script>
+
+
+</html>
