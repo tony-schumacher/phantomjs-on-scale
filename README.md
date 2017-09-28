@@ -17,6 +17,7 @@ Example projects for the codementor tutorial.
 
 #Get all images
 - GET request to http://localhost:8089/api/images/test
+- (test is the username / foldername)
 - Result:
 ```
 ["/images/test/Thu Sep 28 2017 10:18:30 GMT+0200 (CEST).png","/images/test/Thu Sep 28 2017 10:18:44 GMT+0200 (CEST).png","/images/test/Thu Sep 28 2017 10:19:10 GMT+0200 (CEST).png"]
