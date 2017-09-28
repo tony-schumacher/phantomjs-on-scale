@@ -1,7 +1,6 @@
 phantomjs-on-scale
 ===================
 Example projects for the codementor tutorial.
-
 # How to run it #
 1. Download the project
 2. "npm install"
@@ -23,4 +22,5 @@ Example projects for the codementor tutorial.
 ```javascript
 var result = ["/images/test/Thu Sep 28 2017 10:18:30 GMT+0200 (CEST).png","/images/test/Thu Sep 28 2017 10:18:44 GMT+0200 (CEST).png","/images/test/Thu Sep 28 2017 10:19:10 GMT+0200 (CEST).png"]
 ```
-
+# Frontend for testing #
+![picture alt](https://github.com/TonySchu/phantomjs-on-scale/blob/master/frontend_example.jpg?raw=true "Frontend example")
