@@ -26,7 +26,6 @@ module.exports = function (app) {
         }else{
             res.send("You need to define a user websites to crawl.");
         }
-
     });
 
     // get all images of one user

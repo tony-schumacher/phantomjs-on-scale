@@ -21,7 +21,7 @@ function CrawlObject(index, websites, phantomInstance, crawlStatus) {
     }
 }
 
-//create browser instance
+// create browser instance
 function initPhantom(websites, crawlStatus) {
     //only allow 4 instances at once
     if (checkPhantomStatus() == true) {
@@ -62,7 +62,7 @@ function createWebsiteScreenshots(crawl) {
             page.setting("resourceTimeout", crawl.resourceTimeout);
             return page.open(website);
         })
-        // get HTML content if oyu want to work with it
+        // get HTML content if you want to work with it
         .then(function () {
             // use a delay to make sure page is rendered properly
             return delay(crawl.timeOut).then(function () {
@@ -83,10 +83,9 @@ function createWebsiteScreenshots(crawl) {
         .catch(function (e) {
             restartPhantom(crawl, e);
         });
-
 }
 
-//delay function which returns a promise
+// delay function which returns a promise
 function delay(t) {
     return new Promise(function (resolve) {
         setTimeout(resolve, t)
@@ -123,7 +122,7 @@ function restartPhantom(crawl, e) {
     initPhantom(crawl.websites, crawl.crawlStatus);
 }
 
-//remove the processID from array
+// remove the processID from array
 function removeFromArray(pId) {
     var index = phantomChildren.indexOf(pId);
     phantomChildren.splice(index, 1);
