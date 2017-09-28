@@ -1,2 +1,2 @@
-# phantomjs-on-scale
+node s  # phantomjs-on-scale
 Example projects for the codementor tutorial.
