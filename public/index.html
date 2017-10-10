@@ -118,20 +118,23 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json"
         });
+        getPhantomSessions();
     }
 
     // check phantom status every xy seconds
     function getPhantomSessions() {
+        var htmlVal = 0;
         $.get("/api/phantom-status/", function (data) {
             if(phantomStatus != data.phantom.length){
                 console.log("Status changed, get images");
                 getAllImages();
                 phantomStatus = data.phantom.length;
+                htmlVal = data.phantom.length;
             }
             if(phantomStatus > 0){
-                phantomStatus = phantomStatus + '  <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>';
+                htmlVal = phantomStatus + '  <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>';
             }
-            $("#phantoms").html(phantomStatus);
+            $("#phantoms").html(htmlVal);
         });
     }
 
